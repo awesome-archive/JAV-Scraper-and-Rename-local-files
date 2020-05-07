@@ -1,6 +1,11 @@
-# -*- coding:utf-8 -*-
-from os import system
+
+pre_versions
+/
+1.0.6
+/# -*- coding:utf-8 -*-
+import os
 from configparser import RawConfigParser
+from shutil import copyfile
 from traceback import format_exc
 
 try:
@@ -11,9 +16,9 @@ try:
     config_settings.set("收集nfo", "是否收集nfo？", "是")
     config_settings.set("收集nfo", "nfo中title的格式", "车牌+空格+标题")
     config_settings.set("收集nfo", "是否去除标题末尾可能存在的演员姓名？", "否")
-    config_settings.set("收集nfo", "额外将以下元素添加到特征中", "系列、片商")
-    config_settings.set("收集nfo", "是否将特征保存到genre？", "是")
-    config_settings.set("收集nfo", "是否将特征保存到tag？", "是")
+    config_settings.set("收集nfo", "是否将系列作为特征？", "是")
+    config_settings.set("收集nfo", "是否将片商作为特征？", "是")
+    config_settings.set("收集nfo", "额外将以下元素添加到特征中", "")
     config_settings.add_section("重命名影片")
     config_settings.set("重命名影片", "是否重命名影片？", "是")
     config_settings.set("重命名影片", "重命名影片的格式", "车牌+空格+标题")
@@ -29,11 +34,10 @@ try:
     config_settings.set("下载封面", "是否下载封面海报？", "是")
     config_settings.set("下载封面", "DVD封面的格式", "视频+-fanart.jpg")
     config_settings.set("下载封面", "海报的格式", "视频+-poster.jpg")
-    config_settings.set("下载封面", "是否为海报加上中文字幕条幅？", "否")
-    config_settings.set("下载封面", "是否为海报加上无码流出条幅？", "否")
     config_settings.add_section("字幕文件")
     config_settings.set("字幕文件", "是否重命名已有的字幕文件？", "是")
     config_settings.set("字幕文件", "是否跳过已有字幕的影片？", "是")
+    config_settings.set("字幕文件", "已有字幕即nfo包含", "-C、中字、中文字幕、㊥")
     config_settings.add_section("kodi专用")
     config_settings.set("kodi专用", "是否收集演员头像？", "否")
     config_settings.set("kodi专用", "是否对多cd只收集一份图片和nfo？", "否")
@@ -55,17 +59,17 @@ try:
     config_settings.add_section("原影片文件的性质")
     config_settings.set("原影片文件的性质", "无视有码、素人视频文件名中多余的形如abc123的字母数字", "XHD1080、MM616、FHD-1080")
     config_settings.set("原影片文件的性质", "无视无码视频文件名中多余的字母数字", "1080P、CARIBBEAN、CARIB、1PONDO、1PON、FHD、ALL、TOKYO-HOT、TOKYOHOT、3XPLANET、FULL")
-    config_settings.set("原影片文件的性质", "是否中字即文件名包含", "-C、_C、中字、中文字幕、字幕")
+    config_settings.set("原影片文件的性质", "是否中字即文件名包含", "-c、-C、_C、中字、中文字幕")
     config_settings.set("原影片文件的性质", "是否中字的表现形式", "㊥")
-    config_settings.set("原影片文件的性质", "是否流出即文件名包含", "流出")
-    config_settings.set("原影片文件的性质", "是否流出的表现形式", "无码流出")
+    config_settings.set("原影片文件的性质", "是否xx即文件名包含", "流出")
+    config_settings.set("原影片文件的性质", "是否xx的表现形式", "无码流出")
     config_settings.set("原影片文件的性质", "有码", "有码")
     config_settings.set("原影片文件的性质", "无码", "无码")
     config_settings.set("原影片文件的性质", "素人", "素人")
     config_settings.set("原影片文件的性质", "FC2", "FC2")
     config_settings.add_section("信息来源")
     config_settings.set("信息来源", "是否用javlibrary整理影片时收集网友的热评？", "是")
-    config_settings.set("信息来源", "是否用javlibrary整理影片时优先从javbus下载图片？", "否")
+    config_settings.set("信息来源", "是否用javlibrary整理影片时优先从javbus下载图片？", "是")
     config_settings.set("信息来源", "列出车牌(素人为主，可自行添加)", "LUXU、MIUM、GANA、NTK、ARA、DCV、MAAN、HOI、NAMA、SWEET、SIRO、SCUTE、CUTE、SQB、JKZ、URF、SIMM、ORETD、PER、EZD、EVA、JAC、ORE、ION")
     config_settings.add_section("其他设置")
     config_settings.set("其他设置", "简繁中文？", "简")
@@ -95,8 +99,8 @@ try:
     config_actor.set("说明", "你可以去保存一下她的头像jpg到“演员头像”文件夹", "以后就能保存她的头像到影片的文件夹了")
     config_actor.write(open('actors_for_kodi.ini', "w", encoding='utf-8-sig'))
     print('    >“actors_for_kodi.ini”重写成功！')
-    system('pause')
+    os.system('pause')
 except:
     print(format_exc())
     print('\n创建ini失败，解决上述问题后，重新打开exe创建ini！')
-    system('pause')
+    os.system('pause')

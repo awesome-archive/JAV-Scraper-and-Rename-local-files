@@ -55,7 +55,7 @@ try:
     config_settings.add_section("原影片文件的性质")
     config_settings.set("原影片文件的性质", "无视有码、素人视频文件名中多余的形如abc123的字母数字", "XHD1080、MM616、FHD-1080")
     config_settings.set("原影片文件的性质", "无视无码视频文件名中多余的字母数字", "1080P、CARIBBEAN、CARIB、1PONDO、1PON、FHD、ALL、TOKYO-HOT、TOKYOHOT、3XPLANET、FULL")
-    config_settings.set("原影片文件的性质", "是否中字即文件名包含", "-C、_C、中字、中文字幕、字幕")
+    config_settings.set("原影片文件的性质", "是否中字即文件名包含", "-c、-C、_C、中字、中文字幕")
     config_settings.set("原影片文件的性质", "是否中字的表现形式", "㊥")
     config_settings.set("原影片文件的性质", "是否流出即文件名包含", "流出")
     config_settings.set("原影片文件的性质", "是否流出的表现形式", "无码流出")
