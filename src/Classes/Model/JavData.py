@@ -54,8 +54,8 @@ class JavData(object):
         self.Publisher = ''
         """13 发行商"""
 
-        self.Score = 0.0
-        """14 评分\n\n10分制"""
+        self.Score = 0
+        """14 评分\n\n百分制"""
 
         self.CoverDb = ''
         """15 封面Db"""
@@ -68,8 +68,8 @@ class JavData(object):
 
         self.CoverDmm = ''
         """18 封面Dmm"""
-
-        self.CutType = CutTypeEnum.left.value
+        # Todo 之前全写成了left
+        self.CutType = CutTypeEnum.right.value
         """19 裁剪方式"""
 
         self.JavDb = ''

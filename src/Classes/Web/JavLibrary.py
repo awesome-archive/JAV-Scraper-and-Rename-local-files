@@ -171,7 +171,7 @@ class JavLibrary(JavWeb):
             'Cookie': f'cf_clearance={cf_clearance};',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/'
                           '86.0.4240.198 Safari/537.36',
-            'Host': re.search('(www.+com)', url).group(1)
+            'Host': re.search('(www.+com)', url).group(1) if url else ''
         }
 
     # endregion

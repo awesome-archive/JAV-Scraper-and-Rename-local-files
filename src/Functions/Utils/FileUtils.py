@@ -80,3 +80,10 @@ def dir_father(path: str):
     """所处文件夹完整路径"""
     name = os.path.dirname(path)
     return name[:-1] if name.endswith('\\') else name
+
+
+def confirm_dir_exist(dir_path: str):
+    """确保当前目录路径存在"""
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    return dir_path

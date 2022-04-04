@@ -27,7 +27,7 @@ from Functions.Utils.JsonUtils import read_json_to_dict
 
 # region（1）准备全局工具
 logger = MyLogger()
-ini = Ini(Const.YOUMA)
+ini = Ini(Const.YOUMA, Const.INI)
 fileExplorer = FileExplorer(ini)
 fileAnalyzer = FileAnalyzer(ini)
 fileLathe = FileLathe(ini)

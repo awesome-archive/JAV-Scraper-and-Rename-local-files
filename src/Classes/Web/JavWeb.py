@@ -65,7 +65,7 @@ class JavWeb(object):
         """
 
         self.status = ScrapeStatusEnum.not_found
-        """刮削状态\n\n搜寻过程中，"""
+        """刮削状态\n\n在网站搜寻过程中更新它"""
 
     def scrape(self, jav_file: JavFile, jav_data: JavData):
         """

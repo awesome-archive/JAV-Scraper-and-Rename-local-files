@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
-from typing import List
+from typing import List, Dict
 from openpyxl import load_workbook
 
 from Classes.Static.Const import Const
 from Classes.Static.Enums import ExcelColEnum
 
 
-def better_dict_genres(website, to_language):
+def better_dict_genres(website: str, to_language: str) -> Dict[str, str]:
     """
     得到优化的特征字典
 
@@ -17,7 +17,7 @@ def better_dict_genres(website, to_language):
     Returns:
         {'伴侶': '招待小姐', ...}
     """
-    if website in ['Arzon', 'Dmm', 'Jav321']:
+    if website in {'Arzon', 'Dmm', 'Jav321'}:
         return {}
 
     # 使用哪一个网站的特征原数据， 0 db，1 library，2 bus，
