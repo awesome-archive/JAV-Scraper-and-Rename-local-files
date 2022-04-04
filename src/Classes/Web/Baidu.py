@@ -71,7 +71,10 @@ class Translator(object):
             # 百度返回了dict json
             json_reads = json.loads(rsp_content)
             if 'code' not in json_reads:
-                return json_reads['trans_result'][0]['dst']
+                try:
+                    return json_reads['trans_result'][0]['dst']
+                except KeyError:
+                    continue
             self._judge_error(json_reads['code'])
         print('    >翻译简介失败...请截图联系作者...')
         return f'【百度翻译出错】{word}'

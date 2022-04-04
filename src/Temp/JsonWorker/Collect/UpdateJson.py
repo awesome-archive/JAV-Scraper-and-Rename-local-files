@@ -30,7 +30,7 @@ def appoint_name(dict_json: dict):
     return f'{dict_json["Car"]}{db}{library}{bus}{arzon}mp4'
 
 
-def repair_dict(dict_json: dict, jav_data: JavData):
+def repair_dict(jav_data: JavData, dict_json: dict):
     if jav_data.CarOrigin:
         dict_json['CarOrigin'] = jav_data.CarOrigin  # 2
     if jav_data.Series:
@@ -147,15 +147,17 @@ for root, dirs, files in os.walk(dir_choose):
                 jav_data.Plot = '【影片下架，暂无简介】'
                 logger.record_warn(f'找不到简介，影片被arzon下架: {url_search_arzon}，')
 
-            jav_data.prefect_completion_status()
+            jav_data.Genres = list(set(jav_data.Genres))
             translator.prefect_zh(jav_data)
+            jav_data.prefect_completion_status()
             dict_json['Modify'] = time_now()
+            repair_dict(jav_data, dict_json)
 
-            dir_new = confirm_dir_exist(f'D:\\MyJava\\MyData\\AlreadyJsons\\修复jsons\\{extract_pref(dict_json["Car"])}')
+            dir_new = confirm_dir_exist(f'D:\\MyJava\\MyData\\AlreadyJsons\\2 新生jsons\\{extract_pref(dict_json["Car"])}')
             write_json(f'{dir_new}\\{file}', dict_json)
             print('    >写json成功')
 
             dir_transfer = confirm_dir_exist(
-                f'D:\\MyJava\\MyData\\AlreadyJsons\\迁移jsons\\{extract_pref(dict_json["Car"])}')
+                f'D:\\MyJava\\MyData\\AlreadyJsons\\3 迁移jsons\\{extract_pref(dict_json["Car"])}')
             os.rename(path, f'{dir_transfer}\\{file}')
             print('    >迁移json成功')
