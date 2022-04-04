@@ -173,7 +173,7 @@ class Ini(object):
 
             # region ######################################## 10其他设置 ########################################
             # Todo 支持繁体
-            self.to_language = 'zh' if dict_ini[Const.LANGUAGE] == 'zh' else 'cht'
+            self.to_language = 'zh' if dict_ini[Const.LANGUAGE] == '简' else 'cht'
             """是否 使用简体中文\n\n标题、简介、特征翻译为“简体”还是“繁体”"""
 
             self.url_library = f'{dict_ini[Const.URL_LIBRARY].rstrip("/")}/cn'
