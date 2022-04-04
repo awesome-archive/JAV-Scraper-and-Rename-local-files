@@ -1,29 +1,29 @@
 /.git/
 /.idea/
-/测试/
 /venv/
-/bug/
-/测试jav/
-/有待更新.docx
-/用前必读.txt
-
 /src/.idea/
+/src/venv/
+
 **/__pycache__/
 /src/build/
 /src/dist/
-/src/venv/
-/src/test.py
-/src/test.html
 
 *.spec
 
-*.ini
 
-*.exe
+/测试/
+/测试jav/
+/bug/
+/有待更新.docx
+/用前必读.txt
 
+/src/test.py
+/src/test.html
 /src/*.ico
 /src/*.png
 
-/src/*.txt
+*.ini
+*.exe
 
-#/src/Functions/Web/JavDb.py
+/src/*.txt
+#/src/【素人车牌】.txt
