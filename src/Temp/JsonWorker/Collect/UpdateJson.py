@@ -15,7 +15,7 @@ from Classes.Web.Dmm import Dmm
 from Classes.Web.JavBus import JavBus
 from Classes.Web.JavDb import JavDb
 from Classes.Web.JavLibrary import JavLibrary
-from FileUtils import confirm_dir_exist
+from Functions.Utils.FileUtils import confirm_dir_exist
 from Functions.Utils.Datetime import time_now
 from Functions.Utils.JsonUtils import read_json_to_dict, write_json
 from Functions.Utils.User import choose_directory
@@ -153,11 +153,11 @@ for root, dirs, files in os.walk(dir_choose):
             dict_json['Modify'] = time_now()
             repair_dict(jav_data, dict_json)
 
-            dir_new = confirm_dir_exist(f'D:\\MyJava\\MyData\\AlreadyJsons\\2 新生jsons\\{extract_pref(dict_json["Car"])}')
+            dir_new = confirm_dir_exist(f'C:\\jsons\\2 新生jsons\\{extract_pref(dict_json["Car"])}')
             write_json(f'{dir_new}\\{file}', dict_json)
             print('    >写json成功')
 
             dir_transfer = confirm_dir_exist(
-                f'D:\\MyJava\\MyData\\AlreadyJsons\\3 迁移jsons\\{extract_pref(dict_json["Car"])}')
+                f'C:\\jsons\\3 迁移jsons\\{extract_pref(dict_json["Car"])}')
             os.rename(path, f'{dir_transfer}\\{file}')
             print('    >迁移json成功')
