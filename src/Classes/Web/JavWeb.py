@@ -211,6 +211,7 @@ class JavWeb(object):
                 # 被网站封禁ip
                 input(f'    >被{website}网站封禁: {rsp_content}')
             print('    >打开网页失败，空返回...重新尝试...')
+            print(rsp_content)
         input(f'>>请检查你的网络环境是否可以打开: {url}')
 
     def download_picture(self, url: str, path: str):

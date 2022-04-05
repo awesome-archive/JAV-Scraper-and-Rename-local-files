@@ -21,6 +21,8 @@ from Functions.Utils.JsonUtils import read_json_to_dict, write_json
 from Functions.Utils.User import choose_directory
 from Functions.Metadata.Car import extract_pref
 
+"""纠正之前整理的json的错误，与javsdt主体没什么关系"""
+
 
 def appoint_name(dict_json: dict):
     db = f'仓库{dict_json["JavDb"]}.' if dict_json['JavDb'] else ''

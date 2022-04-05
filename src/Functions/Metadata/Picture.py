@@ -14,6 +14,8 @@ def check_picture(path_picture):
     """
     try:
         img = Image.open(path_picture)
+        if img.mode != 'RGB':  # by @IncubatorShokuhou
+            img.convert('RGB')
         img.load()
         return True
     except (FileNotFoundError, OSError):
@@ -56,6 +58,8 @@ def crop_poster_youma(path_fanart, path_poster):
         path_poster: 目标poster路径
     """
     img = Image.open(path_fanart)
+    if img.mode != 'RGB':
+        img.convert('RGB')
     wf, hf = img.size  # fanart的宽 高
     wide = int(hf / 1.42)  # 理想中海报的宽(应该是379)，应该是fanart的高/1.42，1.42来源于(538/379)
     # 如果fanart不是正常的800*576的横向图，而是非常“瘦”的图
@@ -79,6 +83,8 @@ def crop_poster_default(path_fanart, path_poster, int_pattern):
         int_pattern: 选择模式int_pattern（无码是裁剪fanart右边，FC2和素人是裁剪fanart中间）
     """
     img = Image.open(path_fanart)
+    if img.mode != 'RGB':
+        img.convert('RGB')
     wf, hf = img.size  # fanart的宽 高
     wide = int(hf * 2 / 3)  # 理想中海报的宽，应该是fanart的高的三分之二
     # 如果fanart特别“瘦”（宽不到高的三分之二），则以fanart现在的宽作为poster的宽，未来的高为宽的二分之三。
@@ -104,6 +110,8 @@ def crop_poster_baidu(path_fanart, path_poster, client):
         client: 百度人体分析client
     """
     img = Image.open(path_fanart)
+    if img.mode != 'RGB':
+        img.convert('RGB')
     wf, hf = img.size  # fanart的宽 高
     wide = int(hf * 2 / 3)  # 理想中海报的宽，应该是fanart的高的三分之二
     # 如果fanart特别“瘦”，宽不到高的三分之二。以fanart的宽作为poster的宽。
@@ -135,15 +143,17 @@ def add_watermark_subtitle(path_poster):
         path_poster: poster路径
     """
     # 打开poster，“中文字幕”条幅的宽高是poster的宽的四分之一
-    img_poster = Image.open(path_poster)
-    scroll_wide = int(img_poster.height / 4)
+    img = Image.open(path_poster)
+    if img.mode != 'RGB':
+        img.convert('RGB')
+    scroll_wide = int(img.height / 4)
     # 打开“中文字幕”条幅，缩小到合适poster的尺寸
     watermark_subtitle = Image.open('StaticFiles/subtitle.png')
     watermark_subtitle = watermark_subtitle.resize((scroll_wide, scroll_wide), Image.ANTIALIAS)
     r, g, b, a = watermark_subtitle.split()  # 获取颜色通道，保持png的透明性
     # 条幅在poster上摆放的位置。左上角（0，0）
-    img_poster.paste(watermark_subtitle, (0, 0), mask=a)
-    img_poster.save(path_poster, quality=95)
+    img.paste(watermark_subtitle, (0, 0), mask=a)
+    img.save(path_poster, quality=95)
     print('    >poster加上中文字幕条幅')
 
 
@@ -155,8 +165,10 @@ def add_watermark_divulge(path_poster):
         path_poster: poster路径
     """
     # 打开poster，条幅的宽高是poster的宽的四分之一
-    img_poster = Image.open(path_poster)
-    w, h = img_poster.size
+    img = Image.open(path_poster)
+    if img.mode != 'RGB':
+        img.convert('RGB')
+    w, h = img.size
     scroll_wide = int(h / 4)
     # 打开条幅，缩小到合适poster的尺寸
     watermark_divulge = Image.open('StaticFiles/divulge.png')
@@ -164,6 +176,6 @@ def add_watermark_divulge(path_poster):
     r, g, b, a = watermark_divulge.split()  # 获取颜色通道，保持png的透明性
     # 条幅在poster上摆放的位置。左上角（x_left，0）
     x_left = w - scroll_wide
-    img_poster.paste(watermark_divulge, (x_left, 0), mask=a)
-    img_poster.save(path_poster, quality=95)
+    img.paste(watermark_divulge, (x_left, 0), mask=a)
+    img.save(path_poster, quality=95)
     print('    >poster加上无码流出红幅')

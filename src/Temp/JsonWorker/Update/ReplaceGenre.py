@@ -7,12 +7,7 @@ from Functions.Utils.User import choose_directory
 root_choose = choose_directory()
 list_temp = []
 dict_repalce = {
-    '觸手': '触手',
-    '女主人、女老板': '女主人',
-    '蠻橫嬌羞': '蛮横娇羞',
-    '性感的': '性感',
-    '模特兒': '模特',
-    '和服・喪服': '和服·丧服',
+    '个子高': '高挑'
 }
 for root, dirs, files in os.walk(root_choose):
     for file in files:
@@ -74,4 +69,10 @@ print('数量:', len(list_temp))
 #     '玩具': '玩物',
 #     '鴨嘴': '肛检',
 #     '成熟的女人': '熟女',
+#     '觸手': '触手',
+#     '女主人、女老板': '女主人',
+#     '蠻橫嬌羞': '蛮横娇羞',
+#     '性感的': '性感',
+#     '模特兒': '模特',
+#     '和服・喪服': '和服·丧服',
 # }

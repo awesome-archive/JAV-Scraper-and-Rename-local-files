@@ -27,8 +27,8 @@ for root, dirs, files in os.walk(dir_choose):
             #     list_temp.append(path)
 
             # 98 将score扩大10倍
-            big_ten_cover_dmm(dict_json)
-            write_json(path, dict_json)
+            # big_ten_cover_dmm(dict_json)
+            # write_json(path, dict_json)
 
             # 99 找出满足条件的特殊json，进行相关修改
             # result = find_json_special_key(dict_json, 'CoverLibrary', check_cover_library)
