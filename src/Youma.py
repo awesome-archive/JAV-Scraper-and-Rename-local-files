@@ -210,7 +210,7 @@ while not input_key:
                             and not javDb.download_picture(jav_data.CoverDb, fileLathe.path_fanart)
                             and not javBus.download_picture(jav_data.CoverBus, fileLathe.path_fanart)
                             and not dmm.download_picture(jav_data.CoverDmm, fileLathe.path_fanart)
-                            and not javLibrary.download_picture(jav_data.CoverDmm, fileLathe.path_fanart)
+                            and not javLibrary.download_picture(jav_data.CoverLibrary, fileLathe.path_fanart)
                     ):
                         raise DownloadFanartError('下载fanart失败: ')
                     # 裁剪生成poster
