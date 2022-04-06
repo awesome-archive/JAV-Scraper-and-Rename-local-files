@@ -3,13 +3,13 @@ import os
 from os import sep
 from xml.etree.ElementTree import parse, ParseError
 
-from Classes.Static.Config import Ini
 from Classes.Model.JavFile import JavFile
+from Classes.Static.Config import Ini
 
 
 class FileAnalyzer(object):
     """
-    jav视频文件性质鉴定
+    视频性质鉴定
 
     判定该影片是否有字幕、是否无码流出
     """
@@ -47,15 +47,15 @@ class FileAnalyzer(object):
 
     def _judge_exist_divulge(self, jav_file: JavFile):
         """
-        判断当前jav是否有“无码流出”
+        判断当前jav是否“无码流出”
 
         根据【原文件名】和【已存在的、之前整理的nfo】
         """
-        # 如果原文件名包含“-c、-C、中字”这些字符
+        # 如果原文件名包含“无码流出”这些字符
         for i in self._list_divulge_words_in_filename:
             if i in jav_file.Name_no_ext:
                 return True
-        # 先前整理过的nfo中有 ‘中文字幕’这个Genre
+        # 先前整理过的nfo中有 ‘无码流出’这个Genre
         path_old_nfo = f'{jav_file.Dir}{sep}{jav_file.Name_no_ext}.nfo'
         if os.path.exists(path_old_nfo):
             try:
@@ -69,7 +69,7 @@ class FileAnalyzer(object):
 
     def judge_subtitle_and_divulge(self, jav_file: JavFile):
         """
-        判断当前jav_file是否有“中文字幕”，是否有“无码流出”
+        判断当前jav_file是否有“中文字幕”，是否“无码流出”
 
         Args:
             jav_file: 处理的jav视频文件对象

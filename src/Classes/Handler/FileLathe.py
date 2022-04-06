@@ -4,12 +4,12 @@ from os import sep
 from shutil import copyfile
 from typing import List, TextIO
 
+from Classes.Handler.MyLogger import record_video_old
 from Classes.Model.JavData import JavData
 from Classes.Model.JavFile import JavFile
-from Classes.Handler.MyLogger import record_video_old
-from Classes.Static.Errors import TooManyDirectoryLevelsError
-from Classes.Static.Const import Const
 from Classes.Static.Config import Ini
+from Classes.Static.Const import Const
+from Classes.Static.Errors import TooManyDirectoryLevelsError
 from Functions.Metadata.Picture import check_picture, crop_poster_youma, add_watermark_subtitle, add_watermark_divulge
 from Functions.Utils.FileUtils import replace_xml_invalid_char, replace_os_invalid_char, dir_father
 from Functions.Utils.LittleUtils import cut_str, update_ini_file_value_plus_one
@@ -564,9 +564,6 @@ class FileLathe(object):
 
     # endregion
 
-    def need_fanart_poster(self):
-        return self._need_fanart_poster
-
     def need_download_fanart(self, jav_file: JavFile):
         """
         判断是否需要下载fanart
@@ -664,5 +661,8 @@ class FileLathe(object):
     @property
     def path_fanart(self):
         return self._path_fanart
+
+    def need_fanart_poster(self):
+        return self._need_fanart_poster
 
     # endregion

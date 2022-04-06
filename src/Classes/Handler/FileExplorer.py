@@ -88,7 +88,7 @@ class FileExplorer(object):
     def _check_custom_classify_root(self):
         """检查用户设置的“归类根目录”的合法性"""
 
-        # 用户需要归类，检查他设置的归类根目录是否合法
+        # 用户需要归类
         if self._need_classify:
             dir_root = self._dir_custom_classify_root.rstrip(sep)
             if dir_root not in ['所选文件夹', self._dir_choose]:
@@ -138,7 +138,7 @@ class FileExplorer(object):
 
     # endregion
 
-    def init_dict_subtitle_file(self, list_sub_files: list):
+    def init_dict_subtitle_file(self, list_sub_files: List[str]):
         """
         收集文件中的字幕文件，存储在self._dict_subtitle_file
 
@@ -166,7 +166,7 @@ class FileExplorer(object):
                     # 将 字幕文件 和 车牌 对应到字典中
                     self._dict_subtitle_file[file_raw] = subtitle_car
 
-    def find_jav_files(self, list_sub_files: list):
+    def find_jav_files(self, list_sub_files: List[str]):
         """
         发现jav视频文件
 
@@ -243,17 +243,17 @@ class FileExplorer(object):
 
     @property
     def dir_classify_root(self):
-        """返回真实的归类根目录"""
+        """真实的归类根目录"""
         return self._dir_classify_root
 
     @property
     def list_jav_files(self):
-        """只读jav_files"""
+        """当前一层级文件夹内的jav_files"""
         return self._list_jav_files
 
     @property
     def sum_all_videos(self):
-        """所选文件夹中包含的需处理的视频总数量"""
+        """所选文件夹中的视频总数量"""
         return self._sum_videos_in_choose_dir
 
     # endregion

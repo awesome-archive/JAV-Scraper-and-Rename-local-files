@@ -347,7 +347,7 @@ class JavWeb(object):
             html: 网页
 
         Returns:
-            是否需要更新
+            被禁 => True
         """
         return False
 

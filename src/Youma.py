@@ -84,7 +84,7 @@ while not input_key:
         # 判定当前所处文件夹是否是独立文件夹，独立文件夹是指该文件夹仅用来存放该影片，而不是大杂烩文件夹，是后期移动剪切操作的重要依据
         fileExplorer.judge_separate_folder(list_sub_dirs)
 
-        # 处理“集”的问题，（1）所选文件夹总共有多少个视频文件，包括非jav文件，主要用于显示进度（2）同一车牌有多少cd，用于cd1，cd2...的命名
+        # 处理“集”的问题，同一车牌有多少cd，用于cd1，cd2...的命名
         fileExplorer.init_jav_file_episodes()
         # endregion
 
@@ -122,10 +122,10 @@ while not input_key:
                     # endregion
 
                     # 从javlibrary获取信息
-                    status = javLibrary.scrape(jav_file, jav_data)
-                    if status is ScrapeStatusEnum.not_found:
+                    javLibrary.scrape(jav_file, jav_data)
+                    if javLibrary.status is ScrapeStatusEnum.not_found:
                         logger.record_warn(f'javlibrary找不到该车牌的信息: {jav_file.Car}，')
-                    elif status is ScrapeStatusEnum.multiple_results:
+                    elif javLibrary.status is ScrapeStatusEnum.multiple_results:
                         logger.record_fail(f'javlibrary搜索到同车牌的不同视频: {jav_file.Car}，')
                     # endregion
 
@@ -134,23 +134,23 @@ while not input_key:
                         continue  # 结束对该jav的整理
 
                     # 前往javbus查找【封面】【系列】【特征】.py
-                    status = javBus.scrape(jav_file, jav_data)
-                    if status is ScrapeStatusEnum.multiple_results:
+                    javBus.scrape(jav_file, jav_data)
+                    if javLibrary.status is ScrapeStatusEnum.multiple_results:
                         logger.record_warn(f'javbus搜索到同车牌的不同视频: {jav_file.Car}，')
-                    elif status is ScrapeStatusEnum.not_found:
+                    elif javLibrary.status is ScrapeStatusEnum.not_found:
                         logger.record_warn(f'javbus有码找不到该车牌的信息: {jav_file.Car}，')
                     # endregion
 
                     # region arzon找简介
-                    status = arzon.scrape(jav_file, jav_data)
+                    arzon.scrape(jav_file, jav_data)
                     url_search_arzon = f'https://www.arzon.jp/itemlist.html?t=&m=all&s=&q={jav_file.Car_search}'
-                    if status is ScrapeStatusEnum.exist_but_no_want:
+                    if javLibrary.status is ScrapeStatusEnum.exist_but_no_want:
                         jav_data.Plot = '【arzon有该影片，但找不到简介】'
                         logger.record_warn(f'找不到简介，尽管arzon上有搜索结果: {url_search_arzon}，')
-                    elif status is ScrapeStatusEnum.not_found:
+                    elif javLibrary.status is ScrapeStatusEnum.not_found:
                         jav_data.Plot = '【影片下架，暂无简介】'
                         logger.record_warn(f'找不到简介，影片被arzon下架: {url_search_arzon}，')
-                    # elif status is ScrapeStatusEnum.failed:
+                    # elif javLibrary.status is ScrapeStatusEnum.failed:
                     #     logger.record_warn(f'访问arzon失败，需要重新整理该简介: {url_search_arzon}，')
                     # endregion
 
