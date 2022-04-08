@@ -4,7 +4,6 @@ from json import load, dump
 
 from Functions.Utils.User import choose_directory
 
-print('请选择要整理的文件夹：')
 root_choose = choose_directory()
 for root, dirs, files in os.walk(root_choose):
     for file in files:

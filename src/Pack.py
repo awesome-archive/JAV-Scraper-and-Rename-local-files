@@ -1,6 +1,6 @@
 import os
-import shutil
 from os import sep
+import shutil
 import sys
 from enum import IntEnum
 
@@ -14,7 +14,8 @@ class PyEnum(IntEnum):
 
 print('\n请选择打包程序:'
       '    0、退出'
-      '    1、全体打包\n')
+      '    1、打包javsdt'
+      '    2、打包UpdateJson\n')
 
 
 def move(dir_dist: str):
@@ -28,13 +29,14 @@ def move(dir_dist: str):
 
 
 dir_sdt = 'dist/javsdt'
+dir_update_json = 'dist/UpdateJson'
 while 1:
     pattern = input('请输入: ')
 
     if pattern == '0':
         sys.exit()
 
-    if pattern == '1':
+    elif pattern == '1':
         os.system('pyinstaller CreateIni.py -i StaticFiles/ini.ico')
         print('>>pyinstaller完成')
         move(f'dist{sep}CreateIni')
@@ -66,5 +68,16 @@ while 1:
         # os.system(order)
         # print('>>重新创建ini完成')
 
+    elif pattern == '2':
+        os.system('pyinstaller UpdateJson.py')
+        print('>>pyinstaller完成')
+
+        os.remove('UpdateJson.spec')
+        print('>>删除完成\n')
+
+        shutil.copy('【点我设置整理规则】.ini', f'{dir_update_json}{sep}【点我设置整理规则】.ini')
+        shutil.copy('【特征对照表】.xlsx', f'{dir_update_json}{sep}【特征对照表】.xlsx')
+        shutil.copy('【素人车牌】.txt', f'{dir_update_json}{sep}【素人车牌】.txt')
+        print('>>StaticFiles、【特征对照表】、【素人车牌】复制完成')
     else:
         print('还不支持，请重新输入！\n')

@@ -78,7 +78,7 @@ class Arzon(JavWeb):
                 continue
             # 在ini中记录下这个新通行证
             phpsessid = self._requests.cookies.get_dict()['PHPSESSID']
-            update_ini_file_value(Const.INI, Const.NODE_OTHER, Const.ARZON_PHPSESSID, phpsessid)
+            update_ini_file_value(Const.INI_COOKIES, Const.NODE_COOKIES, Const.ARZON_PHPSESSID, phpsessid)
             print('通过arzon的成人验证！\n')
         input(f'    >打开网页失败，重新尝试... {self._URL_ADULT}')
 

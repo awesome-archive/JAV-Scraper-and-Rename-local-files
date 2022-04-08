@@ -142,9 +142,9 @@ class JavDb(JavWeb):
         return bool(re.search('異常行為', html))
 
     def _update_headers(self):
-        new = input('    >请输入新的db cf_clearance: ')
+        new = input('    >请输入新的javdb cf_clearance: ')
         self._requests.headers = self._init_headers(new)
-        update_ini_file_value(Const.INI, Const.NODE_OTHER, Const.DB_CF_CLEARANCE, new)
+        update_ini_file_value(Const.INI_COOKIES, Const.NODE_COOKIES, Const.DB_CF_CLEARANCE, new)
 
     @staticmethod
     def _init_headers(cf_clearance: str, url: str = ''):

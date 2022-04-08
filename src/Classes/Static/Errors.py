@@ -16,3 +16,8 @@ class SpecifiedUrlError(Exception):
 class CustomClassifyTargetDirError(Exception):
     """用户自定义的归类根目录有问题"""
     pass
+
+
+class PathTooLongError(Exception):
+    """目标路径太长"""
+    pass

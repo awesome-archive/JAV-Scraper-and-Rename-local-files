@@ -3,8 +3,6 @@ import os
 from Temp.JsonWorker.Base.Change import replace_key_name
 from Functions.Utils.User import choose_directory
 
-print('请选择要整理的文件夹：')
-
 list_jsons = []
 root_choose = choose_directory()
 

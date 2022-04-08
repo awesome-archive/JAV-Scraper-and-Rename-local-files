@@ -1,4 +1,5 @@
 import os
+from traceback import format_exc
 
 from Classes.Model.JavFile import JavFile
 from Classes.Handler.FileAnalyzer import FileAnalyzer
@@ -15,6 +16,7 @@ from Classes.Web.Dmm import Dmm
 from Classes.Web.JavBus import JavBus
 from Classes.Web.JavDb import JavDb
 from Classes.Web.JavLibrary import JavLibrary
+from Errors import SpecifiedUrlError
 from Functions.Utils.FileUtils import confirm_dir_exist
 from Functions.Utils.Datetime import time_now
 from Functions.Utils.JsonUtils import read_json_to_dict, write_json
@@ -110,56 +112,58 @@ for root, dirs, files in os.walk(dir_choose):
             jav_file = JavFile(dict_json['Car'], appoint_name(dict_json), '', 1, '', 1)
             jav_data = JavData()
 
-            # region从javdb获取信息
             try:
+                # region从javdb获取信息
                 javDb.scrape(jav_file, jav_data)
                 # Todo找到一个才报警
                 if javDb.status is ScrapeStatusEnum.not_found:
                     logger.record_warn(f'javdb找不到该车牌的信息: {jav_file.Car}，')
                 elif javDb.status is ScrapeStatusEnum.multiple_results:
                     logger.record_fail(f'javlibrary搜索到同车牌的不同视频: {jav_file.Car}，')
-            except:
-                continue
-            # endregion
+                # endregion
 
-            # 从javlibrary获取信息
-            try:
-                status = javLibrary.scrape(jav_file, jav_data)
-                if status is ScrapeStatusEnum.not_found:
+                # 从javlibrary获取信息
+                javLibrary.scrape(jav_file, jav_data)
+                if javLibrary.status is ScrapeStatusEnum.not_found:
                     logger.record_warn(f'javlibrary找不到该车牌的信息: {jav_file.Car}，')
-                elif status is ScrapeStatusEnum.multiple_results:
+                elif javLibrary.status is ScrapeStatusEnum.multiple_results:
                     logger.record_fail(f'javlibrary搜索到同车牌的不同视频: {jav_file.Car}，')
-            except:
-                continue
-            # endregion
+                # endregion
 
-            if not jav_data.JavDb and not jav_data.JavLibrary:
-                logger.record_fail(f'Javdb和Javlibrary都找不到该车牌信息: {jav_file.Car}，')
-                continue  # 结束对该jav的整理
+                if not jav_data.JavDb and not jav_data.JavLibrary:
+                    logger.record_fail(f'Javdb和Javlibrary都找不到该车牌信息: {jav_file.Car}，')
+                    continue  # 结束对该jav的整理
 
-            # 前往javbus查找【封面】【系列】【特征】.py
-            try:
-                status = javBus.scrape(jav_file, jav_data)
-                if status is ScrapeStatusEnum.multiple_results:
+                # 前往javbus查找【封面】【系列】【特征】.py
+                javBus.scrape(jav_file, jav_data)
+                if javBus.status is ScrapeStatusEnum.multiple_results:
                     logger.record_warn(f'javbus搜索到同车牌的不同视频: {jav_file.Car}，')
-                elif status is ScrapeStatusEnum.not_found:
+                elif javBus.status is ScrapeStatusEnum.not_found:
                     logger.record_warn(f'javbus有码找不到该车牌的信息: {jav_file.Car}，')
-            except:
-                continue
-            # endregion
+                # endregion
 
-            # region arzon找简介
-            try:
-                status = arzon.scrape(jav_file, jav_data)
+                # region arzon找简介
+                arzon.scrape(jav_file, jav_data)
                 url_search_arzon = f'https://www.arzon.jp/itemlist.html?t=&m=all&s=&q={jav_file.Car_search}'
-                if status is ScrapeStatusEnum.exist_but_no_want:
+                if javLibrary.status is ScrapeStatusEnum.exist_but_no_want:
                     jav_data.Plot = '【arzon有该影片，但找不到简介】'
                     logger.record_warn(f'找不到简介，尽管arzon上有搜索结果: {url_search_arzon}，')
-                elif status is ScrapeStatusEnum.not_found:
+                elif javLibrary.status is ScrapeStatusEnum.not_found:
                     jav_data.Plot = '【影片下架，暂无简介】'
                     logger.record_warn(f'找不到简介，影片被arzon下架: {url_search_arzon}，')
-            except:
+
+            except SpecifiedUrlError as error:
+                logger.record_fail(str(error))
                 continue
+            except KeyError as error:
+                logger.record_fail(f'发现新的特征需要添加至【特征对照表】，请告知作者: {error}，')
+                continue
+            except FileExistsError as error:
+                logger.record_fail(str(error))
+                continue
+            except:
+                logger.record_fail(f'发生错误，如一直在该影片报错请截图并联系作者: {format_exc()}')
+                continue  # 【退出对该jav的整理】
 
             jav_data.Genres = list(set(jav_data.Genres))
             translator.prefect_zh(jav_data)

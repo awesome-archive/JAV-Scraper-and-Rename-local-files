@@ -121,10 +121,9 @@ class Translator(object):
 
         if self._tran_id and self._tran_sk:
             jav_data.TitleZh = self.translate(jav_data.Title)
-            # Todo title 和 plot分开
             sleep(0.9)
             jav_data.PlotZh = self.translate(jav_data.Plot)
-            print('    >翻译title、plot成功')
+            print('    >翻译标题完成')
             return True
         else:
             print('    >你没有正确填写百度翻译api账户!')

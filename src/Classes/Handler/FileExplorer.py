@@ -223,7 +223,7 @@ class FileExplorer(object):
             list_sub_dirs:（当前所处文件夹包含的）子文件夹们
         """
         # 当前文件夹下，车牌不止一个；还有其他非jav视频；
-        if len(self._dict_car_episode) > 1 or self._sum_videos_in_current_dir > self.len_list_jav_files:
+        if len(self._dict_car_episode) > 1 or self._sum_videos_in_current_dir > len(self._list_jav_files):
             JavFile.Bool_in_separate_folder = False
             return
         # 有其他文件夹，除了演员头像文件夹“.actors”和额外剧照文件夹“extrafanart”；
@@ -235,11 +235,6 @@ class FileExplorer(object):
         return
 
     # region 只读
-
-    @property
-    def len_list_jav_files(self):
-        """当前一层级文件夹内jav视频文件的数量"""
-        return len(self._list_jav_files)
 
     @property
     def dir_classify_root(self):

@@ -71,9 +71,6 @@ class Const(object):
     URL_LIBRARY = 'javlibrary网址'
     URL_BUS = 'javbus网址'
     URL_DB = 'javdb网址'
-    DB_CF_CLEARANCE = 'db的cf_clearance'
-    LIBRARY_CF_CLEARANCE = 'javlibrary的cf_clearance'
-    ARZON_PHPSESSID = 'arzon的phpsessid'
     TUPLE_VIDEO_TYPES = '扫描文件类型'
     INT_TITLE_LEN = '重命名中的标题长度（50~150）'
 
@@ -86,6 +83,12 @@ class Const(object):
     AI_ID = 'appid'
     AI_AK = 'api key'
     AI_SK = 'secret key'
+
+    INI_COOKIES = 'cookies.ini'
+    NODE_COOKIES = 'Cookies'
+    DB_CF_CLEARANCE = 'db的cf_clearance'
+    LIBRARY_CF_CLEARANCE = 'library的cf_clearance'
+    ARZON_PHPSESSID = 'arzon的phpsessid'
     # endregion
 
     # region 头像统计

@@ -1,25 +1,25 @@
 # -*- coding:utf-8 -*-
 import os
-from os import sep  # 路径分隔符: 当前系统的路径分隔符 windows是“\”，linux和mac是“/”
+from os import sep
 import json
 from traceback import format_exc
 
+from Classes.Handler.FileAnalyzer import FileAnalyzer
+from Classes.Handler.FileExplorer import FileExplorer
+from Classes.Handler.FileLathe import FileLathe
+from Classes.Handler.MyLogger import MyLogger
+from Classes.Model.JavData import JavData
+from Classes.Static.Config import Ini
+from Classes.Static.Enums import ScrapeStatusEnum
+from Classes.Static.Errors import TooManyDirectoryLevelsError, SpecifiedUrlError, \
+    CustomClassifyTargetDirError, DownloadFanartError, PathTooLongError
+from Classes.Static.Const import Const
 from Classes.Web.JavDb import JavDb
 from Classes.Web.JavLibrary import JavLibrary
 from Classes.Web.JavBus import JavBus
 from Classes.Web.Arzon import Arzon
 from Classes.Web.Dmm import Dmm
 from Classes.Web.Baidu import Translator
-from Classes.Handler.FileExplorer import FileExplorer
-from Classes.Handler.FileAnalyzer import FileAnalyzer
-from Classes.Handler.FileLathe import FileLathe
-from Classes.Handler.MyLogger import MyLogger
-from Classes.Static.Config import Ini
-from Classes.Model.JavData import JavData
-from Classes.Static.Enums import ScrapeStatusEnum
-from Classes.Static.Errors import TooManyDirectoryLevelsError, SpecifiedUrlError, \
-    CustomClassifyTargetDirError, DownloadFanartError
-from Classes.Static.Const import Const
 from Functions.Utils.FileUtils import dir_father
 from Functions.Utils.Datetime import time_now
 from Functions.Utils.User import choose_directory
@@ -41,12 +41,12 @@ arzon = Arzon(ini)
 dir_pwd_father = dir_father(os.getcwd())
 # endregion
 
-# region（2）整理程序
+# region 整理程序
 # 用户输入“回车”就继续选择文件夹整理
 input_key = ''
 while not input_key:
 
-    # region （2.1）请用户选择需整理的文件夹，重置状态
+    # region 请用户选择需整理的文件夹，重置状态
     dir_choose = choose_directory()
     """用户选择的需要整理的文件夹"""
     # 重置一些属性状态，记录一下用户新选文件夹的操作
@@ -58,7 +58,7 @@ while not input_key:
     fileLathe.update_dir_classify_root(fileExplorer.dir_classify_root)
     # endregion
 
-    # region （3.2）遍历所选文件夹内部进行处理
+    # region 遍历所选文件夹内部进行处理
     print('...文件扫描开始...如果时间过长...请避开高峰期...\n')
     # dir_current【当前所处文件夹】，由浅及深遍历每一层文件夹，list_sub_dirs【子文件夹们】 list_sub_files【子文件们】
     for dir_current, list_sub_dirs, list_sub_files in os.walk(dir_choose):
@@ -78,7 +78,7 @@ while not input_key:
         # 获取当前一级文件夹内，包含的jav
         fileExplorer.find_jav_files(list_sub_files)
         """存放: 需要整理的jav文件对象jav_file"""
-        if not fileExplorer.len_list_jav_files:
+        if not fileExplorer.list_jav_files:
             continue  # 没有jav，则跳出当前所处文件夹
 
         # 判定当前所处文件夹是否是独立文件夹，独立文件夹是指该文件夹仅用来存放该影片，而不是大杂烩文件夹，是后期移动剪切操作的重要依据
@@ -103,6 +103,7 @@ while not input_key:
                 path_json = f'{dir_prefs_jsons}{jav_file.Car}.json'
                 """当前车牌的json存放的路径"""
                 if os.path.exists(path_json):
+                    # 如果用户指定了网址，应该删去本地的json
                     # region 读取已有json
                     print(f'    >从本地json读取元数据: {path_json}')
                     jav_data = JavData(**read_json_to_dict(path_json))
@@ -237,6 +238,8 @@ while not input_key:
             except DownloadFanartError as error:
                 logger.record_fail(str(error))
                 continue
+            except PathTooLongError as error:
+                logger.record_fail(str(error))
             except:
                 logger.record_fail(f'发生错误，如一直在该影片报错请截图并联系作者: {format_exc()}')
                 continue  # 【退出对该jav的整理】

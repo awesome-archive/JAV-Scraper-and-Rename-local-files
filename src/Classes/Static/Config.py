@@ -28,6 +28,10 @@ class Ini(object):
             # region ######################################## 1公式元素 ########################################
             self.need_actors_end_of_title = dict_ini[Const.NEED_ACTORS_END_OF_TITLE] == '是'
             """是否 去除 标题末尾 可能存在的演员姓名"""
+
+            # Todo 4个类型
+            self._av_type = dict_ini[Const.AV_TYPE].split('、')[0]
+            """影片性质 这个元素的表现形式"""
             # endregion
 
             # region ######################################## 2nfo ########################################
@@ -166,9 +170,6 @@ class Ini(object):
 
             self.divulge_expression = dict_ini[Const.DIVULGE_EXPRESSION]
             """是否流出 这个元素的表现形式"""
-
-            self._av_type = dict_ini[self.pattern]
-            """影片性质 这个元素的表现形式"""
             # endregion
 
             # region ######################################## 10其他设置 ########################################
@@ -184,15 +185,6 @@ class Ini(object):
 
             self.url_db = dict_ini[Const.URL_DB].rstrip('/')
             """网址 javdb"""
-
-            self.db_cf_clearance = dict_ini[Const.DB_CF_CLEARANCE]
-            """db cookies的一部分"""
-
-            self.library_cf_clearance = dict_ini[Const.LIBRARY_CF_CLEARANCE]
-            """library cookies的一部分"""
-
-            self.arzon_phpsessid = dict_ini[Const.ARZON_PHPSESSID]
-            """arzon cookies的一部分"""
 
             self.tuple_video_types = tuple(dict_ini[Const.TUPLE_VIDEO_TYPES].upper().split('、'))
             """集合:文件类型\n\n只有列举出的视频文件类型，才会被处理"""
@@ -220,6 +212,17 @@ class Ini(object):
             self.ai_sk = dict_ini[Const.AI_SK]
             """账户sk 百度人体分析 """
             # endregion
+
+            conf.read(Const.INI_COOKIES, encoding=Const.ENCODING_INI)
+
+            self.db_cf_clearance = conf.get(Const.NODE_COOKIES, Const.DB_CF_CLEARANCE)
+            """db cookies的一部分"""
+
+            self.library_cf_clearance = conf.get(Const.NODE_COOKIES, Const.LIBRARY_CF_CLEARANCE)
+            """library cookies的一部分"""
+
+            self.arzon_phpsessid = conf.get(Const.NODE_COOKIES, Const.ARZON_PHPSESSID)
+            """arzon cookies的一部分"""
 
             print('\n读取ini文件成功!\n')
         except:

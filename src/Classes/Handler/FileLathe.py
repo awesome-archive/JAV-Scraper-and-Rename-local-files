@@ -9,7 +9,7 @@ from Classes.Model.JavData import JavData
 from Classes.Model.JavFile import JavFile
 from Classes.Static.Config import Ini
 from Classes.Static.Const import Const
-from Classes.Static.Errors import TooManyDirectoryLevelsError
+from Classes.Static.Errors import TooManyDirectoryLevelsError, PathTooLongError
 from Functions.Metadata.Picture import check_picture, crop_poster_youma, add_watermark_subtitle, add_watermark_divulge
 from Functions.Utils.FileUtils import replace_xml_invalid_char, replace_os_invalid_char, dir_father
 from Functions.Utils.LittleUtils import cut_str, update_ini_file_value_plus_one
@@ -108,6 +108,9 @@ class FileLathe(object):
         self._bool_sculpture = ini.need_actor_sculpture
         """是否 为kodi收集演员头像"""
 
+        # 如果需要头像，需检查
+        self.check_actors()
+
         self._need_only_cd = ini.need_only_cd
         """是否 对于多cd的影片，只收集一份图片和nfo（kodi模式）"""
         # endregion
@@ -176,7 +179,9 @@ class FileLathe(object):
         """
         # 标题
         str_actors = ' '.join(jav_data.Actors[:3])  # 演员们字符串
-        len_real_limit = self._len_title_limit - len(str_actors) if self._bool_need_actors_end_of_title else 0
+        len_real_limit = self._len_title_limit - len(str_actors) \
+            if self._bool_need_actors_end_of_title \
+            else self._len_title_limit
         """实际限制的标题长 = 限制标题长 - 末尾可能存在的演员文字长"""
         title_cut = cut_str(jav_data.Title, len_real_limit)
         zh_complete_title = jav_data.TitleZh or jav_data.Title  # 如果用户用了“中文标题”，但没有翻译标题，那么还是用日文
@@ -286,6 +291,8 @@ class FileLathe(object):
         name_new = f'{self._assemble_file_formula("_list_name_video")}{jav_file.Cd}'
         """新视频文件名，不带文件类型"""
         path_new = f'{jav_file.Dir}{sep}{name_new}{jav_file.Ext}'
+        if len(path_new) > 259:
+            raise PathTooLongError(f'新视频文件名太长了: {path_new}')  # 【终止整理】
         """视频文件的新路径"""
         # endregion
 
@@ -577,6 +584,8 @@ class FileLathe(object):
 
         # fanart预期路径
         path_fanart = f'{jav_file.Dir}{sep}{self._assemble_file_formula("_list_name_fanart")}'
+        if len(path_fanart) > 259:
+            raise PathTooLongError(f'fanart文件名太长了: {path_fanart}')  # 【终止整理】
         # kodi只需要一份图片，不管视频是cd几，仅需一份图片。
         if self._need_only_cd:
             path_fanart = path_fanart.replace(jav_file.Cd, '')
